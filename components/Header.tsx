@@ -21,11 +21,13 @@ function Header() {
   }, [])
 
   return (
-    <header className={`${isScrolled && 'bg-red-500'}`}>
+    <header className={`${isScrolled && 'bg-slate-900'}`}>
       <div className="flex items-center space-x-2 md:space-x-10">
         <img
           src="https://rb.gy/ulxxee"
-          width={100}
+          width=
+          
+          {100}
           height={100}
           className="cursor-pointer object-contain"
           alt=""
