@@ -1,38 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import Link from 'next/link'
+import React, { useEffect, useState } from 'react';
+import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import useAuth from '@/hooks/useAuth';
 
 function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { logOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        setIsScrolled(true)
+        setIsScrolled(true);
       } else {
-        setIsScrolled(false)
+        setIsScrolled(false);
       }
-    }
-    window.addEventListener('scroll', handleScroll)
+    };
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <header className={`${isScrolled && 'bg-slate-900'}`}>
       <div className="flex items-center space-x-2 md:space-x-10">
         <img
           src="https://rb.gy/ulxxee"
-          width=
-          
-          {100}
+          width={100}
           height={100}
-          className="cursor-pointer object-contain"
+          className="cursor-pointer "
           alt=""
         />
-
         <ul className="hidden space-x-4 md:flex">
           <li className="headerLink">Home</li>
           <li className="headerLink">TV Shows</li>
@@ -45,16 +43,15 @@ function Header() {
         <MagnifyingGlassIcon className=" hidden w-6 h-6 sm:inline" />
         <p className="hidden lg:inline:"></p>
         <BellIcon className="w-6 h-6" />
-        <Link href="/account">
-          <img
-            src="https://rb.gy/g1pwyx"
-            alt=""
-            className="cursor-pointer rounded"
-          />
-        </Link>
+        <img
+          onClick={logOut}
+          src="https://rb.gy/g1pwyx"
+          alt="account"
+          className="cursor-pointer rounded"
+        />
       </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

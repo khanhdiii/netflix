@@ -1,14 +1,17 @@
-import React from 'react'
-import '../styles/globals.css'
+import React from 'react';
+import '../styles/globals.css';
+import { AppProps } from 'next/app';
+import { AuthProvider } from '@/hooks/useAuth';
+import { RecoilRoot } from 'recoil';
 
-function MyApp({
-  Component,
-  pageProps,
-}: {
-  Component: React.ElementType
-  pageProps: any
-}) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <RecoilRoot>
+      <AuthProvider>
+        <Component {...pageProps} />;
+      </AuthProvider>
+    </RecoilRoot>
+  );
 }
 
-export default MyApp
+export default MyApp;
