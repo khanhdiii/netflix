@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <AuthProvider>
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </AuthProvider>
     </RecoilRoot>
   );

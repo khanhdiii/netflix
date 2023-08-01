@@ -29,6 +29,7 @@ function Login() {
       await signUp(email, password);
     }
   };
+
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
       <Head>
@@ -95,6 +96,10 @@ function Login() {
           >
             Sign In
           </button>
+
+          {/* <button onClick={() => signInWithGithub()}>
+            Sign in with GitHub
+          </button> */}
 
           <label>
             <input type="checkbox" />

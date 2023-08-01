@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -7,8 +8,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
-import { auth } from '../fisebase';
-
+import { auth } from '@/firebase';
 interface IAuth {
   user: User | null;
   signUp: (email: string, password: string) => Promise<void>;
@@ -34,7 +34,6 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState(null);
   const [initialLoading, setInitialLoading] = useState(true);
 
   const router = useRouter();
@@ -103,7 +102,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       signIn,
       loading,
       logOut,
-      error,
     }),
     [user, loading],
   );
