@@ -6,6 +6,7 @@ import Membership from '@/components/MemberShip';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { message } from 'antd';
+import Image from 'next/image';
 
 interface Customers {
   id: string;
@@ -14,7 +15,7 @@ interface Customers {
 
 function Account() {
   const { logOut } = useAuth();
-  const [customers, setCustomers] = useState<Customers[]>([]);
+  const [, setCustomers] = useState<Customers[]>([]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -41,7 +42,8 @@ function Account() {
 
       <header className={`bg-[#141414]`}>
         <Link href="/">
-          <img
+          <Image
+            alt=""
             src="https://rb.gy/ulxxee"
             width={120}
             height={120}
@@ -49,8 +51,10 @@ function Account() {
           />
         </Link>
         <Link href="/account">
-          <img
+          <Image
             src="https://rb.gy/g1pwyx"
+            width={120}
+            height={120}
             alt=""
             className="cursor-pointer rounded"
           />
