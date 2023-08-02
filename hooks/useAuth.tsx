@@ -14,7 +14,7 @@ interface IAuth {
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
-  error: string | null;
+  error?: string | null;
   loading: boolean;
 }
 

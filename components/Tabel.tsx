@@ -1,18 +1,12 @@
 import { CheckIcon } from '@heroicons/react/24/solid';
-import { Product } from '@stripe/firestore-stripe-payments';
 
-interface Props {
-  products: Product[];
-  selectedPlan?: Product | null;
-}
-
-function Table({ products, selectedPlan }: Props) {
+function Table({ products, selectedPlan }: any) {
   return (
     <table>
       <tbody className="divide-y divide-[gray]">
         <tr className="tableRow">
           <td className="tableDataTitle">Monthly price</td>
-          {products.map((product) => (
+          {products.map((product: any) => (
             <td
               key={product.id}
               className={`tableDataFeature ${
@@ -29,7 +23,7 @@ function Table({ products, selectedPlan }: Props) {
 
         <tr className="tableRow">
           <td className="tableDataTitle">Video quality</td>
-          {products.map((product) => (
+          {products.map((product: any) => (
             <td
               key={product.id}
               className={`tableDataFeature ${
@@ -45,7 +39,7 @@ function Table({ products, selectedPlan }: Props) {
 
         <tr className="tableRow">
           <td className="tableDataTitle">Resolution</td>
-          {products.map((product) => (
+          {products.map((product: any) => (
             <td
               className={`tableDataFeature ${
                 selectedPlan?.id === product.id
@@ -63,7 +57,7 @@ function Table({ products, selectedPlan }: Props) {
           <td className="tableDataTitle">
             Watch on your TV, computer, mobile phone and tablet
           </td>
-          {products.map((product) => (
+          {products.map((product: any) => (
             <td
               className={`tableDataFeature ${
                 selectedPlan?.id === product.id

@@ -3,10 +3,8 @@ import MuiModal from '@mui/material/Modal';
 import { modalState, movieState } from '@/atoms/modalAtom';
 import { useRecoilState } from 'recoil';
 import {
-  CheckIcon,
   HandThumbUpIcon,
   PlayIcon,
-  PlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import { Element, Genre } from '@/typings';
@@ -22,7 +20,7 @@ function Modal() {
   const [trailer, setTrailer] = useState('');
   const [genres, setGenres] = useState<Genre[]>([]);
   const [muted] = useState(true);
-  const [addeedToList, setAddedToList] = useState(false);
+  // const [addeedToList, setAddedToList] = useState(false);
 
   useEffect(() => {
     async function fetchMovie() {
@@ -49,8 +47,8 @@ function Modal() {
     fetchMovie();
   }, [movie]);
 
-  const handleList = async () => {
-  }
+  // const handleList = async () => {
+  // }
 
   return (
     <MuiModal
@@ -87,13 +85,13 @@ function Modal() {
                 Play
               </button>
 
-              <button className="modalButton" onClick={handleList}>
+              {/* <button className="modalButton" onClick={handleList}>
                 {addeedToList ?  (
                   <CheckIcon className="w-7 h-7" />
                 ):(
                   <PlusIcon className="w-7 h-7" />
                 )}
-              </button>
+              </button> */}
               <button className="modalButton">
                 <HandThumbUpIcon className="w-7 h-7" />
               </button>

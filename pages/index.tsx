@@ -14,11 +14,17 @@ import { db } from '@/firebase';
 import Plans from '@/components/Plans';
 import { message } from 'antd';
 
-interface ProductProps {
+export interface ProductProps {
   id: number;
   name: string;
   description: string;
-  prices: any[];
+  prices?: any[];
+  metadata?: {
+    videoQuality?: string;
+    resolution?: string;
+    portability?: string;
+  };
+  selectedPlan?: any;
 }
 
 interface Props {
@@ -45,7 +51,7 @@ const Home = ({
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
-  const subscription = true;
+  const subscription = false;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -80,7 +86,7 @@ const Home = ({
     fetchProducts();
   }, []);
 
-  if (subscription === false) return <Plans products={products} />;
+  if (!subscription) return <Plans products={products} />;
   if (loading) return null;
 
   return (

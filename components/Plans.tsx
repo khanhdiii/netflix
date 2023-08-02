@@ -12,6 +12,7 @@ interface ProductProps {
   name: string;
   description: string;
   prices?: any[];
+  selectedPlan?: any;
 }
 
 function Plans({ products }: any) {
