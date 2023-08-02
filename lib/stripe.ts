@@ -3,8 +3,9 @@ import {
   getStripePayments,
 } from '@stripe/firestore-stripe-payments';
 import { getFunctions, httpsCallable } from '@firebase/functions';
-import app from '../firebase';
+
 import { message } from 'antd';
+import { app } from '@/firebase';
 
 const payments = getStripePayments(app, {
   productsCollection: 'products',
