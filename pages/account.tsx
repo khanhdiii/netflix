@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import useAuth from '../hooks/useAuth';
-import useSubscription from '../hooks/useSubscription';
 import Membership from '@/components/MemberShip';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '@/firebase';
+import { db } from '@/firebase';
+import { message } from 'antd';
 
 interface Customers {
   id: string;
@@ -13,27 +13,25 @@ interface Customers {
 }
 
 function Account() {
-  const { user, logOut } = useAuth();
-  const [customers, setCustomers] = useState<Customers[]>([]); // Define the state hook for customers
+  const { logOut } = useAuth();
+  const [customers, setCustomers] = useState<Customers[]>([]);
 
-  console.log(customers);
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const querySnapshot = await getDocs(collection(firestore, 'customers'));
-        const customersData: any = querySnapshot.docs.map((doc) => {
-          const customerData = doc.data() as Customers;
-          return { ...customerData, id: doc.id };
-        });
-
+        const querySnapshot = await getDocs(collection(db, 'customers'));
+        const customersData: Customers[] = querySnapshot.docs.map(
+          (doc) => doc.data() as Customers,
+        );
         setCustomers(customersData);
       } catch (error) {
-        console.error('Error fetching customers:', error);
+        message.error('fetch data is failed');
       }
     };
 
     fetchCustomers();
   }, []);
+
   return (
     <div>
       <Head>
@@ -95,10 +93,10 @@ function Account() {
 
 export default Account;
 
-export const getStaticProps: any = async () => {
+export const getStaticProps = async () => {
   return {
     props: {
-      products: [],
+      customers: [],
     },
   };
 };

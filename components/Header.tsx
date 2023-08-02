@@ -50,11 +50,13 @@ function Header() {
         <BellIcon className="w-6 h-6" />
         <Link href="/account">
           <img
-            // onClick={logOut}
             src="https://rb.gy/g1pwyx"
             alt="account"
             className="cursor-pointer rounded"
           />
+        </Link>
+        <Link href="/login">
+          <button onClick={logOut}>Logout</button>
         </Link>
       </div>
     </header>

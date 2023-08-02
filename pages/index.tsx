@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Plans from '@/components/Plans';
+import { message } from 'antd';
 
 interface ProductProps {
   id: number;
@@ -65,7 +66,6 @@ const Home = ({
               priceDoc.data(),
             );
             productData.prices = prices;
-            console.log(`Prices for product ${productData.id}:`, prices);
           },
         );
 
@@ -73,7 +73,7 @@ const Home = ({
 
         setProducts(productsData);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        message.error('Fetch data is failed');
       }
     };
 
