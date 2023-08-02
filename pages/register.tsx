@@ -1,35 +1,29 @@
 import useAuth from '@/hooks/useAuth';
-import { message } from 'antd';
+import { Form, Input, message, Row, Col, Button, Spin } from 'antd';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface RegisterForm {
   email: string;
   password: string;
+  confirm: string;
 }
 
 function Register() {
+  const router = useRouter();
+  const [formRegister] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterForm>();
-
   const { signUp } = useAuth();
-  const emailValidationPattern =
-    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-  const onSubmit: SubmitHandler<RegisterForm> = async ({ email, password }) => {
+  const onSubmit = async (values: RegisterForm) => {
     setLoading(true);
-
     try {
-      await signUp(email, password);
-      message.success('Register is sucessfully');
+      await signUp(values.email, values.password);
+      message.success('Register is successful');
     } catch (error) {
-      message.success('Register is failed');
+      message.error('Register failed');
     } finally {
       setLoading(false);
     }
@@ -54,56 +48,105 @@ function Register() {
         width={150}
         height={150}
       />
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="relative mt-24 space-y-8 rounded bg-black/75 py-10 px-6 md:mt-0 md:max-w-md md:px-14"
-      >
-        <h1 className="text-4xl font-semibold text-center">Register</h1>
-        <div className="space-y-4">
-          <label className="inline-block w-full">
-            <input
-              type="text"
-              placeholder="Email"
-              className="input"
-              {...register('email', {
-                required: true,
-                pattern: emailValidationPattern,
-              })}
-            />
-            {errors?.email && (
-              <p className="p-1 text-[13px] font-light text-orange-500">
-                Please enter a valid email
-              </p>
-            )}
-          </label>
-          <label className="inline-block w-full">
-            <input
-              type="password"
-              placeholder="Password"
-              className="input"
-              {...register('password', {
-                required: true,
-                minLength: 6,
-                maxLength: 40,
-              })}
-            />
-            {errors?.password && (
-              <p className="p-1 text-[13px] font-light text-orange-500">
-                Your password must contain between 6 and 40 characters
-              </p>
-            )}
-          </label>
-        </div>
-        <div>
-          <button
-            type="submit"
-            className="w-full rounded bg-[#e50914] py-3 font-semibold capitalize"
-            disabled={loading}
-          >
-            {loading ? 'Register...' : 'Register'}
-          </button>
-        </div>
-      </form>
+      <Row justify="center">
+        <Col xs={24} sm={24} md={24} lg={24}>
+          <Spin spinning={loading}>
+            <Form
+              layout="vertical"
+              form={formRegister}
+              name="register"
+              onFinish={onSubmit}
+              scrollToFirstError
+              className="relative mt-24 space-y-4 rounded bg-white/75 py-10 px-6 w-600"
+            >
+              <h1 className="text-4xl font-semibold text-center">Register</h1>
+              <Form.Item
+                className="inline-block w-full"
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your Email!',
+                  },
+                  {
+                    type: 'email',
+                    message: 'Please input a valid email!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                className="inline-block w-full"
+                name="password"
+                label="Password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your password!',
+                  },
+                  {
+                    min: 6,
+                    max: 30,
+                    message: 'Please input between 6-30 characters',
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Form.Item
+                name="confirm"
+                label="Confirm Password"
+                dependencies={['password']}
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please confirm your password!',
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          'The passwords that you entered do not match!',
+                        ),
+                      );
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <div>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="flex w-full h-10 rounded bg-[#e50914] py-3 font-semibold capitalize justify-center items-center !hover:bg-black"
+                  disabled={loading}
+                >
+                  <p className="justify-center items-center">
+                    {loading ? 'Registering...' : 'Register'}
+                  </p>
+                </Button>
+              </div>
+
+              <div className="py-3 font-semibold capitalize justify-center items-center text-red-500">
+                <Button
+                  color="red"
+                  type="link"
+                  onClick={() => router.push('/login')}
+                >
+                  Back to Login
+                </Button>
+              </div>
+            </Form>
+          </Spin>
+        </Col>
+      </Row>
     </div>
   );
 }

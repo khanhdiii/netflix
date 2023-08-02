@@ -1,11 +1,19 @@
+import React, { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { message } from 'antd';
-import { GithubAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { auth } from '@/firebase';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+} from 'firebase/auth';
+
+import github from '@/public/icon/Github.png';
+import google from '@/public/icon/Google.webp';
 
 interface Inputs {
   email: string;
@@ -21,6 +29,8 @@ function Login() {
   } = useForm<Inputs>();
 
   const { signIn } = useAuth();
+  const googleAuth = new GoogleAuthProvider();
+  const githubAuth = new GithubAuthProvider();
   const emailValidationPattern =
     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const router = useRouter();
@@ -36,14 +46,18 @@ function Login() {
     }
   };
 
-  const signInWithGithub = async () => {
-    try {
-      const auth = getAuth();
-      const provider = new GithubAuthProvider();
-      await signInWithPopup(auth, provider);
+  const signInWithGoogle = async () => {
+    const result = await signInWithPopup(auth, googleAuth);
+    if (result) {
+      message.success('login Successfull');
       router.push('/');
-    } catch (error) {
-      message.error('GitHub login is failed!');
+    }
+  };
+  const signInWithGithub = async () => {
+    const result = await signInWithPopup(auth, githubAuth);
+    if (result) {
+      message.success('login Successfull');
+      router.push('/');
     }
   };
 
@@ -76,9 +90,8 @@ function Login() {
           <label className="inline-block w-full">
             <input
               type="text"
-              placeholder="email"
+              placeholder="Email"
               className="input"
-              defaultValue="khanh@gmail.com"
               {...register('email', {
                 required: true,
                 pattern: emailValidationPattern,
@@ -93,9 +106,8 @@ function Login() {
           <label className="inline-block w-full">
             <input
               type="password"
-              placeholder="password"
+              placeholder="Password"
               className="input"
-              defaultValue="123123"
               {...register('password', {
                 required: true,
                 minLength: 6,
@@ -111,20 +123,39 @@ function Login() {
         </div>
         <div>
           <button
-            className="w-full rounded bg-[#e50914] py-3 font-semibold capitalize"
+            className="w-full rounded bg-[#e50914] py-3 font-semibold capitalize mb-2"
             onClick={() => setLogin(true)}
           >
             Sign In
           </button>
 
-          <button onClick={() => signInWithGithub()}>
-            Sign in with GitHub
-          </button>
-
-          <label>
+          <label className="mb-2">
             <input type="checkbox" />
             Remember me
           </label>
+          <h3 className="flex justify-center mb-2 text-lg font-medium text-gray-300">
+            Or Login With
+          </h3>
+          <div className="flex justify-center">
+            <div className="flex justify-around items-center bg-white w-2/6 ">
+              <Image
+                width={30}
+                height={30}
+                className=" rounded bg-transparent py-3 font-semibold capitalize cursor-pointer"
+                onClick={() => signInWithGoogle()}
+                src={google}
+                alt="google"
+              />
+              <Image
+                width={30}
+                height={30}
+                className=" rounded bg-white py-3 font-semibold capitalize cursor-pointer"
+                onClick={() => signInWithGithub()}
+                src={github}
+                alt="github"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="text-[gray]">
