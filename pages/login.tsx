@@ -29,8 +29,7 @@ function Login() {
   } = useForm<Inputs>();
 
   const { signIn } = useAuth();
-  const googleAuth = new GoogleAuthProvider();
-  const githubAuth = new GithubAuthProvider();
+
   const emailValidationPattern =
     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const router = useRouter();
@@ -45,7 +44,7 @@ function Login() {
       return;
     }
   };
-
+  const googleAuth = new GoogleAuthProvider();
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, googleAuth);
     if (result) {
@@ -53,6 +52,11 @@ function Login() {
       router.push('/');
     }
   };
+  const githubAuth = new GithubAuthProvider();
+  githubAuth.setCustomParameters({
+    clientId: '9c25a8a9d50e23899ef0',
+  });
+
   const signInWithGithub = async () => {
     const result = await signInWithPopup(auth, githubAuth);
     if (result) {
@@ -137,7 +141,7 @@ function Login() {
             Or Login With
           </h3>
           <div className="flex justify-center">
-            <div className="flex justify-around items-center bg-white w-2/6 ">
+            <div className="flex justify-around items-center bg-white w-2/6 rounded-md">
               <Image
                 width={30}
                 height={30}
