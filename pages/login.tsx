@@ -11,7 +11,6 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
 } from 'firebase/auth';
-
 import github from '@/public/icon/Github.png';
 import google from '@/public/icon/Google.webp';
 
@@ -44,21 +43,27 @@ function Login() {
       return;
     }
   };
-  const googleAuth = new GoogleAuthProvider();
+  const providerGoogle = new GoogleAuthProvider();
+  providerGoogle.setCustomParameters({
+    clientId:
+      '966777528859-sk06jcbe5mgd49q7re12np5qehk0ddq7.apps.googleusercontent.com',
+  });
+
   const signInWithGoogle = async () => {
-    const result = await signInWithPopup(auth, googleAuth);
+    const result = await signInWithPopup(auth, providerGoogle);
     if (result) {
       message.success('login Successfull');
       router.push('/');
     }
   };
-  const githubAuth = new GithubAuthProvider();
-  githubAuth.setCustomParameters({
+
+  const providerGithub = new GithubAuthProvider();
+  providerGithub.setCustomParameters({
     clientId: '9c25a8a9d50e23899ef0',
   });
 
   const signInWithGithub = async () => {
-    const result = await signInWithPopup(auth, githubAuth);
+    const result = await signInWithPopup(auth, providerGithub);
     if (result) {
       message.success('login Successfull');
       router.push('/');
