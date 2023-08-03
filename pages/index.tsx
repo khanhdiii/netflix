@@ -50,8 +50,8 @@ const Home = ({
 }: Props) => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
-  const [products, setProducts] = useState<ProductProps[]>([]);
-  const subscription = true;
+  const [, setProducts] = useState<ProductProps[]>([]);
+  // const subscription = true;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,7 +86,7 @@ const Home = ({
     fetchProducts();
   }, []);
 
-  if (!subscription) return <Plans products={products} />;
+  // if (!subscription) return <Plans products={products} />;
   if (loading) return null;
 
   return (
