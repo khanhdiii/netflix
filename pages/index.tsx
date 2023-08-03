@@ -11,7 +11,7 @@ import { modalState } from '@/atoms/modalAtom';
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
-import Plans from '@/components/Plans';
+// import Plans from '@/components/Plans';
 import { message } from 'antd';
 
 export interface ProductProps {
