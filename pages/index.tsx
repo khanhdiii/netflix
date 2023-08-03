@@ -51,7 +51,7 @@ const Home = ({
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
-  const subscription = false;
+  const subscription = true;
 
   useEffect(() => {
     const fetchProducts = async () => {
