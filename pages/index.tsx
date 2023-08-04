@@ -50,7 +50,7 @@ const Home = ({
 }: Props) => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
-  const [, setProducts] = useState<ProductProps[]>([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const subscription = true;
 
   useEffect(() => {
