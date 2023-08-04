@@ -22,7 +22,9 @@ interface Inputs {
 }
 
 function Login() {
+  const [, setUser] = useState(null);
   const [login, setLogin] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -73,16 +75,32 @@ function Login() {
   };
 
   const providerFacebook = new FacebookAuthProvider();
-  providerFacebook.setCustomParameters({
-    clientId: '1726308464540466',
-  });
+  // providerFacebook.setCustomParameters({
+  //   clientId: '9c25a8a9d50e23899ef0',
+  // });
+
+  // const signInWithFacebook = async () => {
+  //   const result = await signInWithPopup(auth, providerFacebook);
+  //   if (result) {
+  //     message.success('login Successfull');
+  //     router.push('/');
+  //   }
+  // };
 
   const signInWithFacebook = async () => {
-    const result = await signInWithPopup(auth, providerFacebook);
-    if (result) {
-      message.success('login Successfull');
-      router.push('/');
-    }
+    signInWithPopup(auth, providerFacebook)
+      .then((result: any) => {
+        setUser(result.user);
+        const credential: any =
+          FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken;
+        fetch(
+          `https://graph.facebook.com/${result.user.providerData[0].uid}/picture?type=large&access_token=${accessToken}`,
+        ).then((response) => response.blob());
+      })
+      .catch((err) => {
+        message.error(err);
+      });
   };
 
   return (

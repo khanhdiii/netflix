@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-
+import { FacebookAuthProvider } from 'firebase/auth';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyBqkxa37PeutL5mcwfiaeu4iE33eJIXBDk',
@@ -13,4 +13,7 @@ const firebaseConfig = {
 };
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
-export const auth = getAuth();
+const auth = getAuth();
+
+const provider = new FacebookAuthProvider();
+export { auth, provider };
