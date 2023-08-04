@@ -10,9 +10,11 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
+  FacebookAuthProvider,
 } from 'firebase/auth';
 import github from '@/public/icon/Github.png';
 import google from '@/public/icon/Google.webp';
+import facebook from '@/public/icon/Facebook.png';
 
 interface Inputs {
   email: string;
@@ -64,6 +66,19 @@ function Login() {
 
   const signInWithGithub = async () => {
     const result = await signInWithPopup(auth, providerGithub);
+    if (result) {
+      message.success('login Successfull');
+      router.push('/');
+    }
+  };
+
+  const providerFacebook = new FacebookAuthProvider();
+  providerFacebook.setCustomParameters({
+    clientId: '1726308464540466',
+  });
+
+  const signInWithFacebook = async () => {
+    const result = await signInWithPopup(auth, providerFacebook);
     if (result) {
       message.success('login Successfull');
       router.push('/');
@@ -162,6 +177,14 @@ function Login() {
                 onClick={() => signInWithGithub()}
                 src={github}
                 alt="github"
+              />
+              <Image
+                width={30}
+                height={30}
+                className=" rounded bg-white py-3 font-semibold capitalize cursor-pointer"
+                onClick={() => signInWithFacebook()}
+                src={facebook}
+                alt="facebook"
               />
             </div>
           </div>
