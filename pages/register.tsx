@@ -1,9 +1,14 @@
+import { auth } from '@/firebase';
 import useAuth from '@/hooks/useAuth';
 import { Form, Input, message, Row, Col, Button, Spin } from 'antd';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface RegisterForm {
   email: string;
@@ -12,22 +17,48 @@ interface RegisterForm {
 }
 
 function Register() {
-  const router = useRouter();
   const [formRegister] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const { user } = useAuth();
 
-  const onSubmit = async (values: RegisterForm) => {
-    setLoading(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
+
+  const handleSignUp = async (values: RegisterForm) => {
     try {
-      await signUp(values.email, values.password);
-      message.success('Register is successful');
-    } catch (error) {
-      message.error('Register failed');
-    } finally {
+      setLoading(true);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password,
+      );
+
+      if (userCredential && auth.currentUser) {
+        // Send email verification
+        await sendEmailVerification(auth.currentUser);
+
+        message.success(
+          'Account registered successfully! Please check your email for verification.',
+        );
+        router.push('/');
+      }
+    } catch (error: any) {
       setLoading(false);
+      message.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if (user && user.emailVerified) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
@@ -55,7 +86,7 @@ function Register() {
               layout="vertical"
               form={formRegister}
               name="register"
-              onFinish={onSubmit}
+              onFinish={handleSignUp}
               scrollToFirstError
               className="relative mt-24 space-y-4 rounded bg-white/75 py-10 px-6 w-600"
             >

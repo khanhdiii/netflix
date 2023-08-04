@@ -47,60 +47,40 @@ function Login() {
     }
   };
   const providerGoogle = new GoogleAuthProvider();
-  providerGoogle.setCustomParameters({
-    clientId:
-      '966777528859-sk06jcbe5mgd49q7re12np5qehk0ddq7.apps.googleusercontent.com',
-  });
 
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, providerGoogle);
     if (result) {
       message.success('login Successfull');
       router.push('/');
+    } else {
+      message.warning('email existed or login failed ');
     }
   };
 
   const providerGithub = new GithubAuthProvider();
-  providerGithub.setCustomParameters({
-    clientId: '9c25a8a9d50e23899ef0',
-  });
 
   const signInWithGithub = async () => {
     const result = await signInWithPopup(auth, providerGithub);
     if (result) {
       message.success('login Successfull');
       router.push('/');
+    } else {
+      message.warning('email existed or login failed ');
     }
   };
 
   const providerFacebook = new FacebookAuthProvider();
-  providerFacebook.setCustomParameters({
-    clientId: '9c25a8a9d50e23899ef0',
-  });
 
   const signInWithFacebook = async () => {
     const result = await signInWithPopup(auth, providerFacebook);
     if (result) {
       message.success('login Successfull');
       router.push('/');
+    } else {
+      message.warning('email existed or login failed ');
     }
   };
-
-  // const signInWithFacebook = async () => {
-  //   signInWithPopup(auth, providerFacebook)
-  //     .then((result: any) => {
-  //       setUser(result.user);
-  //       const credential: any =
-  //         FacebookAuthProvider.credentialFromResult(result);
-  //       const accessToken = credential.accessToken;
-  //       fetch(
-  //         `https://graph.facebook.com/${result.user.providerData[0].uid}/picture?type=large&access_token=${accessToken}`,
-  //       ).then((response) => response.blob());
-  //     })
-  //     .catch((err) => {
-  //       message.error(err);
-  //     });
-  // };
 
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
