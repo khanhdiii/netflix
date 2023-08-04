@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Loader from './Loader';
 import { useState } from 'react';
 import Table from './Tabel';
-import { loadCheckout } from '@/lib/stripe';
 
 interface ProductProps {
   id: number;
@@ -25,7 +24,6 @@ function Plans({ products }: any) {
     }
     const firstPriceId = selectedPlan.prices[0]?.id;
     if (firstPriceId) {
-      loadCheckout(firstPriceId);
       setBillingLoading(true);
     }
   };
