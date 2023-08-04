@@ -22,7 +22,6 @@ interface Inputs {
 }
 
 function Login() {
-  const [, setUser] = useState(null);
   const [login, setLogin] = useState(false);
 
   const {
@@ -75,33 +74,33 @@ function Login() {
   };
 
   const providerFacebook = new FacebookAuthProvider();
-  // providerFacebook.setCustomParameters({
-  //   clientId: '9c25a8a9d50e23899ef0',
-  // });
-
-  // const signInWithFacebook = async () => {
-  //   const result = await signInWithPopup(auth, providerFacebook);
-  //   if (result) {
-  //     message.success('login Successfull');
-  //     router.push('/');
-  //   }
-  // };
+  providerFacebook.setCustomParameters({
+    clientId: '9c25a8a9d50e23899ef0',
+  });
 
   const signInWithFacebook = async () => {
-    signInWithPopup(auth, providerFacebook)
-      .then((result: any) => {
-        setUser(result.user);
-        const credential: any =
-          FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-        fetch(
-          `https://graph.facebook.com/${result.user.providerData[0].uid}/picture?type=large&access_token=${accessToken}`,
-        ).then((response) => response.blob());
-      })
-      .catch((err) => {
-        message.error(err);
-      });
+    const result = await signInWithPopup(auth, providerFacebook);
+    if (result) {
+      message.success('login Successfull');
+      router.push('/');
+    }
   };
+
+  // const signInWithFacebook = async () => {
+  //   signInWithPopup(auth, providerFacebook)
+  //     .then((result: any) => {
+  //       setUser(result.user);
+  //       const credential: any =
+  //         FacebookAuthProvider.credentialFromResult(result);
+  //       const accessToken = credential.accessToken;
+  //       fetch(
+  //         `https://graph.facebook.com/${result.user.providerData[0].uid}/picture?type=large&access_token=${accessToken}`,
+  //       ).then((response) => response.blob());
+  //     })
+  //     .catch((err) => {
+  //       message.error(err);
+  //     });
+  // };
 
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
@@ -179,11 +178,11 @@ function Login() {
             Or Login With
           </h3>
           <div className="flex justify-center">
-            <div className="flex justify-around items-center bg-white w-2/6 rounded-md">
+            <div className="flex justify-around items-center bg-white w-3/6 rounded-md">
               <Image
                 width={30}
                 height={30}
-                className=" rounded bg-transparent py-3 font-semibold capitalize cursor-pointer"
+                className=" rounded bg-transparent py-3 font-semibold capitalize cursor-pointer border-black"
                 onClick={() => signInWithGoogle()}
                 src={google}
                 alt="google"
