@@ -74,7 +74,7 @@ function Plans({ products }: any) {
 
         <div className="mt-4 flex flex-col space-y-4">
           <div className="flex w-full items-center justify-center self-end md:w-3/5">
-            {products.map((product: any) => (
+            {products?.map((product: any) => (
               <div
                 key={product.id}
                 className={`planBox ${

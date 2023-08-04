@@ -13,7 +13,7 @@ function useList(uid: string | undefined) {
       collection(db, 'customers', uid, 'myList'),
       (snapshot) => {
         setList(
-          snapshot.docs.map((doc) => ({
+          snapshot.docs?.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           })),

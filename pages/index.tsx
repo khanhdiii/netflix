@@ -57,18 +57,18 @@ const Home = ({
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
-        const productsData: any = querySnapshot.docs.map((doc) => {
+        const productsData: any = querySnapshot.docs?.map((doc) => {
           const productData = doc.data() as ProductProps;
           productData.prices = [];
           return { ...productData, id: doc.id };
         });
 
-        const priceFetchPromises = productsData.map(
+        const priceFetchPromises = productsData?.map(
           async (productData: any) => {
             const pricesSnapshot = await getDocs(
               collection(db, `products/${productData.id}/prices`),
             );
-            const prices = pricesSnapshot.docs.map((priceDoc) =>
+            const prices = pricesSnapshot.docs?.map((priceDoc) =>
               priceDoc.data(),
             );
             productData.prices = prices;

@@ -20,7 +20,7 @@ function Account() {
     const fetchCustomers = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'customers'));
-        const customersData: Customers[] = querySnapshot.docs.map(
+        const customersData: Customers[] = querySnapshot.docs?.map(
           (doc) => doc.data() as Customers,
         );
         setCustomers(customersData);
