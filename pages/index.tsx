@@ -1,7 +1,7 @@
 import { useRecoilValue } from 'recoil';
 import Banner from '@/components/Banner';
 import Header from '@/components/Header';
-import Row from '@/components/Row';
+// import Row from '@/components/Row';
 import useAuth from '@/hooks/useAuth';
 import { Movie } from '@/typings';
 import requests from '@/utils/requests';
@@ -14,34 +14,24 @@ import { db } from '@/firebase';
 import Plans from '@/components/Plans';
 import { message } from 'antd';
 
-interface ProductProps {
+export interface ProductProps {
   id: number;
   name: string;
   description: string;
-  prices: any[];
+  prices?: any[];
+  metadata?: {
+    videoQuality?: string;
+    resolution?: string;
+    portability?: string;
+  };
+  selectedPlan?: any;
 }
 
 interface Props {
   netflixOriginals: Movie[];
-  trendingNow: Movie[];
-  topRated: Movie[];
-  actionMovies: Movie[];
-  comedyMovies: Movie[];
-  horrorMovies: Movie[];
-  romanceMovies: Movie[];
-  documentaries: Movie[];
 }
 
-const Home = ({
-  netflixOriginals,
-  trendingNow,
-  actionMovies,
-  comedyMovies,
-  documentaries,
-  horrorMovies,
-  romanceMovies,
-  topRated,
-}: Props) => {
+const Home = ({ netflixOriginals }: Props) => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
@@ -51,22 +41,21 @@ const Home = ({
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
-        const productsData: any = querySnapshot.docs.map((doc) => {
+        const productsData: any = querySnapshot.docs?.map((doc) => {
           const productData = doc.data() as ProductProps;
           productData.prices = [];
           return { ...productData, id: doc.id };
         });
 
-        const priceFetchPromises = productsData.map(
+        const priceFetchPromises = productsData?.map(
           async (productData: any) => {
             const pricesSnapshot = await getDocs(
               collection(db, `products/${productData.id}/prices`),
             );
-            const prices = pricesSnapshot.docs.map((priceDoc) =>
+            const prices = pricesSnapshot.docs?.map((priceDoc) =>
               priceDoc.data(),
             );
             productData.prices = prices;
-            message.error(`Prices for product`);
           },
         );
 
@@ -74,7 +63,7 @@ const Home = ({
 
         setProducts(productsData);
       } catch (error) {
-        message.error('Error fetching products:');
+        message.error('Fetch data is failed');
       }
     };
 
@@ -93,15 +82,16 @@ const Home = ({
       <Header />
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
         <Banner netflixOriginals={netflixOriginals} />
-        <section className="md:space-y-24">
+        {/* <section className="md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} />
           <Row title="Top Rated" movies={topRated} />
           <Row title="Action Thrillers" movies={actionMovies} />
+       
           <Row title="Comedies" movies={comedyMovies} />
           <Row title="Scary Movies" movies={horrorMovies} />
           <Row title="Romance Movies" movies={romanceMovies} />
           <Row title="Documentaries" movies={documentaries} />
-        </section>
+        </section> */}
       </main>
       {showModal && <Modal />}
     </div>
