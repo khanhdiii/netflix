@@ -1,4 +1,4 @@
-import { useRecoilValue } from 'recoil';
+// import { useRecoilValue } from 'recoil';
 import Banner from '@/components/Banner';
 import Header from '@/components/Header';
 import Row from '@/components/Row';
@@ -6,8 +6,8 @@ import useAuth from '@/hooks/useAuth';
 import { Movie } from '@/typings';
 // import requests from '@/utils/requests';
 import Head from 'next/head';
-import Modal from '@/components/Modal';
-import { modalState } from '@/atoms/modalAtom';
+// import Modal from '@/components/Modal';
+// import { modalState } from '@/atoms/modalAtom';
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
@@ -49,7 +49,7 @@ const Home = ({
   topRated,
 }: Props) => {
   const { loading } = useAuth();
-  const showModal = useRecoilValue(modalState);
+  // const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
   const subscription = true;
 
@@ -109,7 +109,7 @@ const Home = ({
           <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
-      {showModal && <Modal />}
+      {/* {showModal && <Modal />} */}
     </div>
   );
 };
