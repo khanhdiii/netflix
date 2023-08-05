@@ -1,9 +1,9 @@
 import { useRecoilValue } from 'recoil';
-import Banner from '@/components/Banner';
+// import Banner from '@/components/Banner';
 import Header from '@/components/Header';
 // import Row from '@/components/Row';
 import useAuth from '@/hooks/useAuth';
-import { Movie } from '@/typings';
+// import { Movie } from '@/typings';
 import requests from '@/utils/requests';
 import Head from 'next/head';
 import Modal from '@/components/Modal';
@@ -27,11 +27,7 @@ export interface ProductProps {
   selectedPlan?: any;
 }
 
-interface Props {
-  netflixOriginals: Movie[];
-}
-
-const Home = ({ netflixOriginals }: Props) => {
+const Home = () => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
@@ -81,7 +77,7 @@ const Home = ({ netflixOriginals }: Props) => {
       </Head>
       <Header />
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
-        <Banner netflixOriginals={netflixOriginals} />
+        {/* <Banner netflixOriginals={netflixOriginals} /> */}
         {/* <section className="md:space-y-24">
           <Row title="Trending Now" movies={trendingNow} />
           <Row title="Top Rated" movies={topRated} />
