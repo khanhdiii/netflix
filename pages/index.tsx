@@ -1,4 +1,3 @@
-// import { useRecoilValue } from 'recoil';
 import Banner from '@/components/Banner';
 import Header from '@/components/Header';
 import Row from '@/components/Row';
@@ -11,8 +10,9 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import Plans from '@/components/Plans';
 import { message } from 'antd';
-// import Modal from '@/components/Modal';
-// import { modalState } from '@/atoms/modalAtom';
+import Modal from '@/components/Modal';
+import { modalState } from '@/atoms/modalAtom';
+import { useRecoilValue } from 'recoil';
 
 export interface ProductProps {
   id: number;
@@ -49,7 +49,7 @@ const Home = ({
   documentaries,
 }: Props) => {
   const { loading } = useAuth();
-  // const showModal = useRecoilValue(modalState);
+  const showModal = useRecoilValue(modalState);
   const [products, setProducts] = useState<ProductProps[]>([]);
   const subscription = true;
 
@@ -108,7 +108,7 @@ const Home = ({
           <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
-      {/* {showModal && <Modal />} */}
+      {showModal && <Modal />}
     </div>
   );
 };
