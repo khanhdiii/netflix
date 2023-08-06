@@ -71,15 +71,15 @@ const Home = ({
             const prices = pricesSnapshot.docs?.map((priceDoc) =>
               priceDoc.data(),
             );
-            productData.prices = prices;
+            return { ...productData, prices };
           },
         );
 
-        await Promise.all(priceFetchPromises);
+        const productsWithData = await Promise.all(priceFetchPromises);
 
-        setProducts(productsData);
+        setProducts(productsWithData);
       } catch (error) {
-        message.error('Fetch data is failed');
+        message.error('Fetch data has failed');
       }
     };
 
