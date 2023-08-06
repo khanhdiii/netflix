@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { message } from 'antd';
 import Head from 'next/head';
@@ -15,6 +15,7 @@ import {
 import github from '@/public/icon/Github.png';
 import google from '@/public/icon/Google.webp';
 import facebook from '@/public/icon/Facebook.png';
+import Cookies from 'js-cookie';
 
 interface Inputs {
   email: string;
@@ -23,6 +24,7 @@ interface Inputs {
 
 function Login() {
   const [login, setLogin] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const {
     register,
@@ -36,17 +38,46 @@ function Login() {
     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const router = useRouter();
 
+  useEffect(() => {
+    const rememberMeCookie = Cookies.get('rememberMe');
+    setRememberMe(rememberMeCookie === 'true');
+  }, []);
+
   const onSubmit: SubmitHandler<Inputs> = async ({
     email,
     password,
   }: Inputs) => {
-    if (login) {
-      await signIn(email, password);
-    } else {
-      return;
+    try {
+      if (login) {
+        const userCredential = await signIn(email, password);
+
+        if (rememberMe) {
+          Cookies.set('rememberMe', 'true', { expires: 30 });
+          localStorage.setItem(
+            'rememberedUser',
+            JSON.stringify(userCredential),
+          );
+          localStorage.setItem(
+            'rememberedUser',
+            JSON.stringify({ email, password }),
+          );
+        } else {
+          Cookies.remove('rememberMe');
+          localStorage.removeItem('rememberedUser');
+        }
+
+        message.success('success');
+      } else {
+        return;
+      }
+    } catch (error) {
+      // ... handle error ...
     }
   };
+
   const providerGoogle = new GoogleAuthProvider();
+  const providerGithub = new GithubAuthProvider();
+  const providerFacebook = new FacebookAuthProvider();
 
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, providerGoogle);
@@ -58,8 +89,6 @@ function Login() {
     }
   };
 
-  const providerGithub = new GithubAuthProvider();
-
   const signInWithGithub = async () => {
     const result = await signInWithPopup(auth, providerGithub);
     if (result) {
@@ -69,8 +98,6 @@ function Login() {
       message.warning('email existed or login failed ');
     }
   };
-
-  const providerFacebook = new FacebookAuthProvider();
 
   const signInWithFacebook = async () => {
     const result = await signInWithPopup(auth, providerFacebook);
@@ -151,7 +178,11 @@ function Login() {
           </button>
 
           <label className="mb-2">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+            />
             Remember me
           </label>
           <h3 className="flex justify-center mb-2 text-lg font-medium text-gray-300">

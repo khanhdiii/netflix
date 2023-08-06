@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import useAuth from '@/hooks/useAuth';
+// import useAuth from '@/hooks/useAuth';
 import BasicMenu from './BasicMenu';
 import Link from 'next/link';
+import { message } from 'antd';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { logOut } = useAuth();
+  // const { logOut } = useAuth();
+
+  const handleLogout = () => {
+    localStorage.removeItem('rememberedUser');
+    // Perform additional logout logic, e.g., clearing tokens on the server
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +27,18 @@ function Header() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    const rememberedUserData = localStorage.getItem('rememberedUser');
+    if (rememberedUserData) {
+      try {
+        JSON.parse(rememberedUserData);
+        // Implement authentication logic using parsedData
+      } catch (error) {
+        message.error('Error parsing user data:');
+      }
+    }
   }, []);
 
   return (
@@ -56,7 +74,7 @@ function Header() {
           />
         </Link>
         <Link href="/login">
-          <button onClick={logOut}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </Link>
       </div>
     </header>
