@@ -8,11 +8,11 @@ import requests from '@/utils/requests';
 import Head from 'next/head';
 import Modal from '@/components/Modal';
 import { modalState } from '@/atoms/modalAtom';
-// import { useEffect, useState } from 'react';
-// import { collection, getDocs } from 'firebase/firestore';
-// import { db } from '@/firebase';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 import Plans from '@/components/Plans';
-// import { message } from 'antd';
+import { message } from 'antd';
 
 export interface ProductProps {
   id: number;
@@ -50,41 +50,41 @@ const Home = ({
 }: Props) => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
-  // const [products, setProducts] = useState<ProductProps[]>([]);
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const subscription = true;
 
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const querySnapshot = await getDocs(collection(db, 'products'));
-  //       const productsData: any = querySnapshot.docs?.map((doc) => {
-  //         const productData = doc.data() as ProductProps;
-  //         productData.prices = [];
-  //         return { ...productData, id: doc.id };
-  //       });
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        const productsData: any = querySnapshot.docs?.map((doc) => {
+          const productData = doc.data() as ProductProps;
+          productData.prices = [];
+          return { ...productData, id: doc.id };
+        });
 
-  //       const priceFetchPromises = productsData?.map(
-  //         async (productData: any) => {
-  //           const pricesSnapshot = await getDocs(
-  //             collection(db, `products/${productData.id}/prices`),
-  //           );
-  //           const prices = pricesSnapshot.docs?.map((priceDoc) =>
-  //             priceDoc.data(),
-  //           );
-  //           return { ...productData, prices };
-  //         },
-  //       );
+        const priceFetchPromises = productsData?.map(
+          async (productData: any) => {
+            const pricesSnapshot = await getDocs(
+              collection(db, `products/${productData.id}/prices`),
+            );
+            const prices = pricesSnapshot.docs?.map((priceDoc) =>
+              priceDoc.data(),
+            );
+            productData.prices = prices;
+          },
+        );
 
-  //       const productsWithData = await Promise.all(priceFetchPromises);
+        await Promise.all(priceFetchPromises);
 
-  //       setProducts(productsWithData);
-  //     } catch (error) {
-  //       message.error('Fetch data has failed');
-  //     }
-  //   };
+        setProducts(productsData);
+      } catch (error) {
+        message.error('Fetch data is failed');
+      }
+    };
 
-  //   fetchProducts();
-  // }, []);
+    fetchProducts();
+  }, []);
 
   if (!subscription) return <Plans products={products} />;
   if (loading) return null;
