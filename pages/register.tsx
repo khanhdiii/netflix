@@ -1,5 +1,6 @@
 import { auth } from '@/firebase';
 import useAuth from '@/hooks/useAuth';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { Form, Input, message, Row, Col, Button, Spin } from 'antd';
 import {
   createUserWithEmailAndPassword,
@@ -9,12 +10,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-
-interface RegisterForm {
-  email: string;
-  password: string;
-  confirm: string;
-}
 
 function Register() {
   const [formRegister] = Form.useForm();
@@ -29,7 +24,7 @@ function Register() {
     }
   }, [user, router]);
 
-  const handleSignUp = async (values: RegisterForm) => {
+  const onFinish = async (values: any) => {
     try {
       setLoading(true);
 
@@ -44,13 +39,18 @@ function Register() {
         await sendEmailVerification(auth.currentUser);
 
         message.success(
-          'Account registered successfully! Please check your email for verification.',
+          'Account registered successfully! Please check your email for verification. And back to login',
         );
-        router.push('/');
       }
     } catch (error: any) {
       setLoading(false);
       message.error(error.message);
+    }
+  };
+
+  const handleRouter = () => {
+    {
+      router.push('/login');
     }
   };
 
@@ -78,6 +78,7 @@ function Register() {
         className="absolute left-4 top-4 cursor-pointer object-contain md:left-10 md:top-6"
         width={150}
         height={150}
+        onClick={handleRouter}
       />
       <Row justify="center">
         <Col xs={24} sm={24} md={24} lg={24}>
@@ -86,15 +87,17 @@ function Register() {
               layout="vertical"
               form={formRegister}
               name="register"
-              onFinish={handleSignUp}
-              scrollToFirstError
-              className="relative mt-24 space-y-4 rounded bg-white/75 py-10 px-6 w-600"
+              onFinish={onFinish}
+              className="relative mt-24 space-y-4 rounded bg-black/75 py-10 w-500 px-20"
             >
-              <h1 className="text-4xl font-semibold text-center">Register</h1>
+              <h1 className="text-4xl font-semibold text-center text-white mb-10">
+                Register
+              </h1>
+              <span className="text-white text-xl">Email</span>{' '}
+              <span className="text-red-700">*</span>
               <Form.Item
-                className="inline-block w-full"
+                className="inline-block w-full text-white"
                 name="email"
-                label="Email"
                 rules={[
                   {
                     required: true,
@@ -106,12 +109,13 @@ function Register() {
                   },
                 ]}
               >
-                <Input />
+                <Input className="custom-input" />
               </Form.Item>
+              <span className="text-white text-xl">Password</span>{' '}
+              <span className="text-red-700">*</span>
               <Form.Item
                 className="inline-block w-full"
                 name="password"
-                label="Password"
                 rules={[
                   {
                     required: true,
@@ -124,11 +128,12 @@ function Register() {
                   },
                 ]}
               >
-                <Input.Password />
+                <Input.Password className="custom-input" />
               </Form.Item>
+              <span className="text-white text-xl">Confirm Password</span>{' '}
+              <span className="text-red-700">*</span>
               <Form.Item
                 name="confirm"
-                label="Confirm Password"
                 dependencies={['password']}
                 hasFeedback
                 rules={[
@@ -150,29 +155,25 @@ function Register() {
                   }),
                 ]}
               >
-                <Input.Password />
+                <Input.Password className="custom-input" />
               </Form.Item>
               <div>
                 <Button
                   type="primary"
                   htmlType="submit"
-                  className="flex w-full h-10 rounded bg-[#e50914] py-3 font-semibold capitalize justify-center items-center !hover:bg-black"
+                  className="flex w-full h-10 rounded bg-[#e50914] py-3 font-semibold capitalize justify-center items-center !hover:bg-black mt-10"
                   disabled={loading}
                 >
-                  <p className="justify-center items-center">
+                  <p className="justify-center items-center text-lg">
                     {loading ? 'Registering...' : 'Register'}
                   </p>
                 </Button>
               </div>
-
-              <div className="py-3 font-semibold capitalize justify-center items-center text-red-500">
-                <Button
-                  color="red"
-                  type="link"
-                  onClick={() => router.push('/login')}
-                >
-                  Back to Login
-                </Button>
+              <div className="flex flex-row py-3 font-semibold capitalize justify-start items-center text-red-500 text-lg hover:text-white">
+                <ArrowLeftIcon className="left-icon" />{' '}
+                <button onClick={() => router.push('/login')}>
+                  Back to login
+                </button>
               </div>
             </Form>
           </Spin>

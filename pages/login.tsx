@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { message } from 'antd';
 import Head from 'next/head';
@@ -15,7 +15,6 @@ import {
 import github from '@/public/icon/Github.png';
 import google from '@/public/icon/Google.webp';
 import facebook from '@/public/icon/Facebook.png';
-import Cookies from 'js-cookie';
 
 interface Inputs {
   email: string;
@@ -24,7 +23,6 @@ interface Inputs {
 
 function Login() {
   const [login, setLogin] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   const {
     register,
@@ -38,40 +36,19 @@ function Login() {
     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const router = useRouter();
 
-  useEffect(() => {
-    const rememberMeCookie = Cookies.get('rememberMe');
-    setRememberMe(rememberMeCookie === 'true');
-  }, []);
-
   const onSubmit: SubmitHandler<Inputs> = async ({
     email,
     password,
   }: Inputs) => {
     try {
       if (login) {
-        const userCredential = await signIn(email, password);
-
-        if (rememberMe) {
-          Cookies.set('rememberMe', 'true', { expires: 30 });
-          localStorage.setItem(
-            'rememberedUser',
-            JSON.stringify(userCredential),
-          );
-          localStorage.setItem(
-            'rememberedUser',
-            JSON.stringify({ email, password }),
-          );
-        } else {
-          Cookies.remove('rememberMe');
-          localStorage.removeItem('rememberedUser');
-        }
-
-        message.success('success');
+        await signIn(email, password);
+        message.success('Login successful');
       } else {
-        return;
+        // Handle login false case?
       }
     } catch (error) {
-      // ... handle error ...
+      message.error('Login failed');
     }
   };
 
@@ -80,12 +57,31 @@ function Login() {
   const providerFacebook = new FacebookAuthProvider();
 
   const signInWithGoogle = async () => {
-    const result = await signInWithPopup(auth, providerGoogle);
-    if (result) {
-      message.success('login Successfull');
-      router.push('/');
-    } else {
-      message.warning('email existed or login failed ');
+    try {
+      const result = await signInWithPopup(auth, providerGoogle);
+
+      if (result) {
+        // const user = result.user;
+        // // Save user data to Firestore
+        // const userDoc = await db
+        //   .collection('customers')
+        //   .doc(user.uid)
+        //   .set({
+        //     uid: user.uid,
+        //     email: user.email,
+        //     stripeId: '', // You can set other fields here
+        //     stripeLink: '',
+        //     provider: user.providerData[0]?.providerId || '',
+        //     photoURL: user.providerData[0]?.photoURL || '',
+        //   });
+
+        message.success('Login successful');
+        router.push('/');
+      } else {
+        message.warning('Login failed');
+      }
+    } catch (error) {
+      message.error('Google sign-in failed');
     }
   };
 
@@ -178,14 +174,16 @@ function Login() {
           </button>
 
           <label className="mb-2">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            Remember me
+            <div className="text-sm">
+              <div
+                onClick={() => router.push('/forgot-password')}
+                className="cursor-pointer font-medium text-lg text-white hover:text-indigo-300"
+              >
+                Forgot password?
+              </div>
+            </div>
           </label>
-          <h3 className="flex justify-center mb-2 text-lg font-medium text-gray-300">
+          <h3 className="flex justify-center mt-2 mb-2 text-lg font-medium text-gray-300">
             Or Login With
           </h3>
           <div className="flex justify-center">

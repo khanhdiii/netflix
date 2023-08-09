@@ -3,13 +3,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBqkxa37PeutL5mcwfiaeu4iE33eJIXBDk',
-  authDomain: 'netflix-app-36b35.firebaseapp.com',
-  projectId: 'netflix-app-36b35',
-  storageBucket: 'netflix-app-36b35.appspot.com',
-  messagingSenderId: '966777528859',
-  appId: '1:966777528859:web:082c89c14c1f115efb4ebe',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 export const app = initializeApp(firebaseConfig);
-export const db = getFirestore();
+export const db = getFirestore(app);
 export const auth = getAuth();

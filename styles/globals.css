@@ -84,4 +84,16 @@
   .menu .MuiMenuItem-root {
     @apply !block !w-72 !py-3.5 !text-center !text-sm !font-light !text-[#b3b3b3] !transition !duration-200 first:cursor-default first:!font-normal first:!text-white hover:!bg-[#11100F];
   }
+  .ant-input {
+   @apply !height: 2.5rem;
+  }
+
+  .custom-input {
+    height: 2.5rem; 
+  }
+
+  .left-icon{
+    width: 2rem;
+    height: 2rem;
+  }
 }

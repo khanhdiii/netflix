@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BellIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-// import useAuth from '@/hooks/useAuth';
 import BasicMenu from './BasicMenu';
 import Link from 'next/link';
 import { message } from 'antd';
+import useAuth from '@/hooks/useAuth';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  // const { logOut } = useAuth();
-
-  const handleLogout = () => {
-    localStorage.removeItem('rememberedUser');
-    // Perform additional logout logic, e.g., clearing tokens on the server
-  };
+  const { logOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +69,9 @@ function Header() {
           />
         </Link>
         <Link href="/login">
-          <button onClick={handleLogout}>Logout</button>
+          <button className="text-lg font-semibold" onClick={logOut}>
+            Logout
+          </button>
         </Link>
       </div>
     </header>
