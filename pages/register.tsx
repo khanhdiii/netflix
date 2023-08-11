@@ -88,7 +88,7 @@ function Register() {
               form={formRegister}
               name="register"
               onFinish={onFinish}
-              className="relative mt-24 space-y-4 rounded bg-black/75 py-10 w-500 px-20"
+              className="form-register relative mt-24 space-y-4 rounded bg-black/75 py-10 w-500 px-20"
             >
               <h1 className="text-4xl font-semibold text-center text-white mb-10">
                 Register
